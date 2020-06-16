@@ -7,6 +7,6 @@ namespace BusinessLogic.Interfaces
     {
         void CheckTaskState();
 
-        List<TaskBL> GetAllTasksBL();
+        IList<TaskBL> GetAllTasksBL();
     }
 }

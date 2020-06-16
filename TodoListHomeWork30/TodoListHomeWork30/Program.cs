@@ -1,7 +1,5 @@
 ﻿using BusinessLogic;
-using DAL.Models;
 using System;
-using System.Collections.Generic;
 
 namespace TodoListHomeWork30
 {
@@ -11,11 +9,16 @@ namespace TodoListHomeWork30
         {
             var todoListManager = new TodoListManager();
 
-            List<TaskBL> tasks = todoListManager.GetAllTasksBL();
+            var tasks = todoListManager.GetAllTasksBL();
 
-            foreach (var item in tasks)
+            foreach (var task in tasks)
             {
-                Console.WriteLine($"{item.Name} - {item.Status}");
+                Console.WriteLine($"{task.Name} - {task.Status}");
+
+                foreach (var category in task.Categories)
+                {
+                    Console.WriteLine($"{category.Name}");
+                }
             }
 
             todoListManager.CheckTaskState();

@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using DAL;
 using DAL.Interfaces;
 using DAL.Models;
@@ -8,10 +9,21 @@ namespace BusinessLogic
 {
     public class TodoListManager : IRepositoryBL
     {
+        public readonly Mapper _mapper;
+
         private readonly IRepositoryDAL todoListRepository;
         public TodoListManager()
         {
             todoListRepository = new RepositoryDAL();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Task, TaskBL>();
+                cfg.CreateMap<Category, CategoryBL>();
+                cfg.CreateMap<CompletedTask, CompletedTaskBL>();
+            });
+
+            _mapper = new Mapper(config);
         }
 
         public void CheckTaskState()
@@ -28,22 +40,34 @@ namespace BusinessLogic
                 }
             }
         }
-        public List<TaskBL> GetAllTasksBL()
+        public IList<TaskBL> GetAllTasksBL()
         {
             var tasks = todoListRepository.GetAllTasks();
 
-            TaskBL taskBl = new TaskBL();
+            return _mapper.Map<IList<TaskBL>>(tasks);
 
-            List<TaskBL> tasksBl = new List<TaskBL>();
+            //var tasks = todoListRepository.GetAllTasks();
 
-            foreach (var item in tasks)
-            {
-                taskBl.Name = item.Name;
-                taskBl.Status = item.Status;
-                tasksBl.Add(taskBl);
-            }
+            //TaskBL taskBl = new TaskBL();
+            //CategoryBL categoryBL = new CategoryBL();
 
-            return tasksBl;
+            //List<TaskBL> tasksBl = new List<TaskBL>();
+
+            //foreach (var task in tasks)
+            //{
+            //    taskBl.Name = task.Name;
+            //    taskBl.Status = task.Status;
+            //    tasksBl.Add(taskBl);
+
+            //    foreach (var category in task.Categories)
+            //    {
+            //        categoryBL.Name = category.Name;
+            //        taskBl.Categories.Add(categoryBL);
+            //    }
+            //    tasksBl.Add(taskBl);
+            //}
+
+            //return tasksBl;
         }
 
         public void UpdateTaskStatus()

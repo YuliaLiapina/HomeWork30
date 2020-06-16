@@ -1,6 +1,7 @@
 ﻿using DAL.Interfaces;
 using DAL.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace DAL
@@ -23,7 +24,7 @@ namespace DAL
         {
             using (var ctx = new TodoListContext())
             {
-                return ctx.Tasks.ToList();
+                return ctx.Tasks.Include(task => task.Categories).ToList();
             }
         }
 
